@@ -9,8 +9,8 @@ dependencies = [
     "flit<4,>=3.2"
 ]
 description = "More migration commands to make development life simpler"
-license = "Apache-2.0"
-name = "django-migration"
+license = { file = "LICENSE.txt" }
+name = "migrator"
 requires-python = ">=3.10"
 version = "0.0.1"
 
@@ -62,7 +62,7 @@ output = ".coverage.xml"
 django_settings_module = "tests.project.settings"
 
 [tool.flit.module]
-name = "src"
+name = "migrator"
 
 [tool.interrogate]
 color = true
@@ -98,7 +98,7 @@ useLibraryCodeForTypes = true
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.project.settings"
 django_find_project = false
-markers = ["mixin", "mixin_view_factory"]
+markers = []
 norecursedirs = [".devcontainer", ".git", ".mypy_cache", "__pycache__", "docs"]
 pythonpath = [".", "src", "tests.project"]
 testpaths = ["tests"]
@@ -145,8 +145,8 @@ extend-exclude = ["docs"]
 ignore-init-module-imports = true
 
 src = ["src", "tests"]
-# Assume Python 3.11.
-target-version = "py311"
+# Assume Python 3.12.
+target-version = "py312"
 
 indent-width = 4
 line-length = 88
@@ -159,12 +159,12 @@ quote-style = "double"
 skip-magic-trailing-comma = false
 
 [tool.ruff.per-file-ignores]
-"src/brackets/*.pyi" = [
+"src/migrator/*.pyi" = [
     "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class
     "D102", # Missing docstring in public method
 ]
-"tests/mixins/test_*.py" = [
+"tests/**/test_*.py" = [
     "ANN001", # Missing type annotation for function argument
     "ANN002", # Missing type annotation for *args
     "ANN003", # Missing type annotation for **kwargs
@@ -176,7 +176,7 @@ skip-magic-trailing-comma = false
 
 [tool.ruff.isort]
 combine-as-imports = true
-known-third-party = ["django", "rest_framework"]
+known-third-party = ["django"]
 split-on-trailing-comma = true
 
 [tool.ruff.mccabe]
