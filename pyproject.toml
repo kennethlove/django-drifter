@@ -1,0 +1,184 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core>=3.2,<4"]
+
+[project]
+authors = [{name = "klove"}]
+dependencies = [
+    "django",
+    "flit<4,>=3.2"
+]
+description = "More migration commands to make development life simpler"
+license = "Apache-2.0"
+name = "django-migration"
+requires-python = ">=3.10"
+version = "0.0.1"
+
+[project.optional-dependencies]
+development = [
+    "django-stubs[compatible-pyright]",
+    "interrogate",
+    "pyright",
+    "ruff"
+]
+testing = [
+    "coverage",
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "pytest-randomly",
+    "pytest-xdist",
+    "tox"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "pragma: no cover",
+    "raise NotImplementedError",
+]
+fail_under = 95
+ignore_errors = true
+omit = [
+    "build/*",
+    "conftest.py",
+    "dist/*",
+    "docs/*",
+    "setup.py",
+    "tests/*",
+    "venv/*",
+]
+show_missing = true
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.xml]
+output = ".coverage.xml"
+
+[tool.django-stubs]
+django_settings_module = "tests.project.settings"
+
+[tool.flit.module]
+name = "src"
+
+[tool.interrogate]
+color = true
+exclude = ["build", "conftest.py", "docs", "setup.py"]
+fail-under = 75
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = false
+ignore-module = true
+ignore-nested-classes = true
+ignore-nested-functions = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-regex = ["^get$", "^mock_.*"]
+ignore-semiprivate = false
+omit-covered-files = true
+quiet = false
+verbose = 1
+
+[tool.pyright]
+exclude = ["build", "dist", "docs", "tests"]
+ignore = ["tests"]
+include = ["src"]
+pythonVerion = "3.11"
+reportMissingImports = "information"
+reportMissingTypeStubs = "information"
+reportUnknownMemberType = "information"
+root = ["src"]
+strict = ["src"]
+typeCheckingMode = "strict"
+useLibraryCodeForTypes = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.project.settings"
+django_find_project = false
+markers = ["mixin", "mixin_view_factory"]
+norecursedirs = [".devcontainer", ".git", ".mypy_cache", "__pycache__", "docs"]
+pythonpath = [".", "src", "tests.project"]
+testpaths = ["tests"]
+
+[tool.ruff]
+select = [
+    "ANN", # flake8-annotations
+    "B",   # flake8-bugbear
+    "BLE", # flake8-blind-except
+    "COM", # flake8-commas
+    "D",   # pydocstyle
+    "DJ",  # flake8-django
+    "E",   # pycodestyle
+    "EM",  # flake8-errmsg
+    "ERA", # flake8-eradicate
+    "F",   # Pyflakes
+    "FBT", # flake8-boolean-trap
+    "G",   # flake8-logging-format
+    "I",   # isort
+    "INP", # flake8-no-pep420
+    "N",   # pep8-naming
+    "PIE", # flake8-pie
+    "PT",  # flake8-pytest
+    "PYI", # flake8-pyi
+    "Q",   # flake8-quotes
+    "RET", # flake8-return
+    "RSE", # flake8-raises
+    "RUF", # ruff-specific rules
+    "S",   # flake8-bandit
+    "SIM", # flake8-simplify
+    "T20", # flake8-print
+    "TCH", # flake8-type-checking
+    "TRY", # tryceratops
+]
+
+# ignore
+ignore = ["ANN101", "COM812", "D203", "D211", "D213", "F403"]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+extend-exclude = ["docs"]
+ignore-init-module-imports = true
+
+src = ["src", "tests"]
+# Assume Python 3.11.
+target-version = "py311"
+
+indent-width = 4
+line-length = 88
+output-format = "pylint"
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "auto"
+quote-style = "double"
+skip-magic-trailing-comma = false
+
+[tool.ruff.per-file-ignores]
+"src/brackets/*.pyi" = [
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+]
+"tests/mixins/test_*.py" = [
+    "ANN001", # Missing type annotation for function argument
+    "ANN002", # Missing type annotation for *args
+    "ANN003", # Missing type annotation for **kwargs
+    "ANN201", # Missing return type annotation for public function
+    "ANN202", # Missing return type annotation for private function
+    "FBT001", # Positional Boolean
+    "S101",   # assert used
+]
+
+[tool.ruff.isort]
+combine-as-imports = true
+known-third-party = ["django", "rest_framework"]
+split-on-trailing-comma = true
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
