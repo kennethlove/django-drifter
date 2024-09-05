@@ -6,6 +6,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("app", type=str, required=False)
+        parser.add_argument("--num", type=int, required=False, default=1)
 
     def handle(self, *args, **options):
         """
@@ -29,6 +30,7 @@ class Command(BaseCommand):
             return
 
         query += " OFFSET 1"
+        # TODO: Include `num` arg to revert N migrations
         cursor.execute(query, [app_name])
         last_app_migration = cursor.fetchone()
         if last_app_migration is None:

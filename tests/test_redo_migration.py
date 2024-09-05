@@ -29,6 +29,7 @@ def test_redo_migration_multiple_migrations(capsys):
 
 @pytest.mark.django_db()
 def test_redo_migration_multiple_migrations_no_app_name(capsys):
+    call_command("migrate", "polls", "zero")
     call_command("migrate", "polls")
     call_command("redo_migration")
     captured = capsys.readouterr()
