@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
 from django.core.management import call_command
+from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -15,6 +16,9 @@ class Command(BaseCommand):
         Get the last `num` migrations from the django_migrations table
         and then undo those migrations
         """
+
+        if not settings.DEBUG:
+            raise CommandError("This command can only be run in DEBUG mode")
 
         # Get the last N migrations from the django_migrations table
         migrations = "SELECT * FROM django_migrations ORDER BY id DESC LIMIT %s"

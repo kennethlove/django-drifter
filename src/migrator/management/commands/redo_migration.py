@@ -1,4 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
+from django.db import connection
+from django.core.management import call_command
 
 
 class Command(BaseCommand):
@@ -12,8 +15,8 @@ class Command(BaseCommand):
         Get the last migration from the django_migrations table
         and then undo and redo that migration
         """
-        from django.db import connection
-        from django.core.management import call_command
+        if not settings.DEBUG:
+            raise CommandError("This command can only be run in DEBUG mode")
 
         query = "SELECT * FROM django_migrations"
         app_name = options.get("app", None)
