@@ -7,5 +7,5 @@ from django.core.management import call_command
 def test_reset_database(capsys):
     call_command("reset_database")
     captured = capsys.readouterr()
-    assert "Unapply all migrations" in captured.out
+    assert "Successfully dropped all tables" in captured.out
     assert "Applying polls.0002" in captured.out

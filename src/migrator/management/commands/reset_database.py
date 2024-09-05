@@ -1,21 +1,17 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.db import connection
+from django.core.management import call_command
 
 
 class Command(BaseCommand):
-    help = 'Reset the database to its initial state'
+    help = 'Drop all tables and run all migrations'
 
     def handle(self, *args, **options):
-        from django.db import connection
-        from django.core.management import call_command
-        from django.apps import apps
-
-        for app in apps.get_app_configs():
-            app_name = app.name.split('.')[-1]
-            if app_name == 'migrator':
-                continue
-            try:
-                call_command('migrate', app_name, 'zero')
-            except CommandError:
-                pass
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")
+            tables = cursor.fetchall()
+            for table in tables:
+                cursor.execute(f'DROP TABLE IF EXISTS "{table[0]}" CASCADE')
+        self.stdout.write(self.style.SUCCESS('Successfully dropped all tables'))
 
         call_command('migrate')
