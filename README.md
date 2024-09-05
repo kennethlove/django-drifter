@@ -11,9 +11,9 @@ run in production (`DEBUG = False`).
 
 ## Features
 
-- **Revert Migration**: Reverts the last migration for a specified app.
-- **Redo Migration**: Reverts and re-applies the last migration for a specified app.
-- **Reset Database**: Undoes all migrations and recreates the database.
+- **Revert Migration**: Reverts one or more migrations, optionally for a specified app.
+- **Redo Migration**: Reverts and re-applies the last migration, optionally for a specified app.
+- **Reset Database**: Drops all tables and runs all migrations.
 
 ## Installation
 
@@ -26,6 +26,14 @@ run in production (`DEBUG = False`).
 2. Install the required dependencies:
    ```sh
    pip install .
+   ```
+   
+3. Add `migrator` to the `INSTALLED_APPS` setting in your Django project's `settings.py` file:
+   ```python
+   INSTALLED_APPS = [
+       ...,
+       'migrator',
+   ]
    ```
 
 ## Usage
