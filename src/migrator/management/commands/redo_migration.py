@@ -5,7 +5,7 @@ class Command(BaseCommand):
     help = 'Undo and redo the last migration'
 
     def add_arguments(self, parser):
-        parser.add_argument("app", type=str)
+        parser.add_argument("--app", type=str, required=False)
 
     def handle(self, *args, **options):
         """
@@ -15,8 +15,11 @@ class Command(BaseCommand):
         from django.db import connection
         from django.core.management import call_command
 
-        app_name = options.get("app")
-        query = "SELECT * FROM django_migrations WHERE app=%s ORDER BY id DESC LIMIT 1"
+        query = "SELECT * FROM django_migrations"
+        app_name = options.get("app", None)
+        if app_name:
+            query += " WHERE app=%s "
+        query += " ORDER BY id DESC LIMIT 1"
 
         cursor = connection.cursor()
         cursor.execute(query, [app_name])
@@ -25,7 +28,9 @@ class Command(BaseCommand):
             print("No migrations to redo")
             return
 
-        cursor.execute(f"{query} OFFSET 1", [app_name])
+        app_name = last_migration[1]
+        query += " OFFSET 1"
+        cursor.execute(query, [app_name])
         last_app_migration = cursor.fetchone()
         if last_app_migration is None:
             migration_name = last_migration[2]
@@ -37,8 +42,8 @@ class Command(BaseCommand):
         try:
             print(f"Migrating {app_name} to {migration_name}")
             call_command('migrate', app_name, migration_name)
-        except CommandError:
-            raise CommandError('Error redoing migration')
+        except CommandError as err:
+            raise CommandError('Error redoing migration', err)
         else:
             print(f"Migrating {app_name} to newest migration")
             call_command('migrate', app_name)
