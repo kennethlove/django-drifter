@@ -58,7 +58,7 @@ python manage.py redo_migration [--app app_name]
 ```
 
 - `--app app_name`: (Optional) The name of the app whose migration you want to redo.
-- 
+ 
 ### Reset Database
 
 The `reset_database` command drops all tables and runs all migrations.
