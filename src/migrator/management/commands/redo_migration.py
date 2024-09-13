@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.core.management import call_command
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand, CommandError, CommandParser
 from django.db import connection
-from argparse import ArgumentParser
 
 
 class Command(BaseCommand):
@@ -10,7 +9,7 @@ class Command(BaseCommand):
 
     help = "Undo and redo the last migration"
 
-    def add_arguments(self, parser: ArgumentParser) -> None:
+    def add_arguments(self, parser: CommandParser) -> None:
         """Add optional app argument to the command."""
         parser.add_argument("--app", type=str, required=False)
 
