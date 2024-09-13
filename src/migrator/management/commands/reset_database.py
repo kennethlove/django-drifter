@@ -1,21 +1,38 @@
+from django.conf import settings
+from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
-from django.core.management import call_command
-from django.conf import settings
 
 
 class Command(BaseCommand):
-    help = 'Drop all tables and run all migrations'
+    """Reset the database."""
 
-    def handle(self, *args, **options):
+    help = "Drop all tables and run all migrations"
+
+    def handle(self, *args: object, **options: object) -> None:
+        """Drop all tables and run all migrations."""
         if not settings.DEBUG:
-            raise CommandError("This command can only be run in DEBUG mode")
+            error = "This command can only be run in DEBUG mode"
+            raise CommandError(error)
+
+        query = ""
+        if settings.DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
+            query = "SELECT tablename FROM pg_tables WHERE schemaname = 'public'"
+        elif settings.DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
+            query = "SHOW TABLES"
+        else:
+            error = "Database engine not supported"
+            raise CommandError(error)
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")
+            cursor.execute(query)
             tables = cursor.fetchall()
             for table in tables:
-                cursor.execute(f'DROP TABLE IF EXISTS "{table[0]}" CASCADE')
-        self.stdout.write(self.style.SUCCESS('Successfully dropped all tables'))
+                try:
+                    cursor.execute(f'DROP TABLE IF EXISTS "{table[0]}" CASCADE')
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(f"Error dropping table {table[0]}: {e}"))
+                    continue
+        self.stdout.write(self.style.SUCCESS("Successfully dropped all tables"))
 
-        call_command('migrate')
+        call_command("migrate")
