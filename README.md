@@ -103,6 +103,8 @@ This command drops all tables and runs all migrations.
 
 ## Contributing
 
+Contributions are more than welcome! Please follow these steps to contribute:
+
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-branch`).
 3. Make your changes.
