@@ -173,6 +173,9 @@ skip-magic-trailing-comma = false
     "FBT001", # Positional Boolean
     "S101",   # assert used
 ]
+"src/migrator/management/commands/*.py" = [
+    "T201", # print() used
+]
 
 [tool.ruff.isort]
 combine-as-imports = true
