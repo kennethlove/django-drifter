@@ -32,7 +32,7 @@ run in production (`DEBUG = False`).
    ```python
    INSTALLED_APPS = [
        ...,
-       'migrator',
+       "migrator",
    ]
    ```
 
@@ -64,10 +64,18 @@ python manage.py redo_migration [--app app_name]
 The `reset_database` command drops all tables and runs all migrations.
 
 ```sh
-python manage.py reset_database
+python manage.py reset_database [--yes]
 ```
 
+- `--yes`: (Optional) Skips the confirmation prompt.
+
 ## Running Tests
+
+Before running the tests, start a local Postgres database:
+
+```shell
+docker run --name migrator-postgres -e POSTGRES_USER=django -e POSTGRES_PASSWORD=django -p 5432:5433 -d polls
+```
 
 To run the tests, use the following command:
 
