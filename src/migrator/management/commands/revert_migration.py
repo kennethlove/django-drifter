@@ -1,24 +1,28 @@
+from django.conf import settings
+from django.core.management import CommandParser, call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
-from django.core.management import call_command
-from django.conf import settings
 
 
 class Command(BaseCommand):
-    help = 'Undo the last migration'
+    """Revert the last migration."""
 
-    def add_arguments(self, parser):
+    help = "Undo the last migration"
+
+    def add_arguments(self, parser: CommandParser) -> None:
+        """Add optional app and num arguments to the command."""
         parser.add_argument("--app", type=str, required=False)
         parser.add_argument("--num", type=int, required=False, default=1)
 
-    def handle(self, *args, **options):
-        """
-        Get the last `num` migrations from the django_migrations table
-        and then undo those migrations
-        """
+    def handle(self, *args: object, **options: object) -> None:
+        """Undo migrations.
 
+        Get the last `num` migrations from the django_migrations table
+        and then undo those migrations.
+        """
         if not settings.DEBUG:
-            raise CommandError("This command can only be run in DEBUG mode")
+            error = "This command can only be run in DEBUG mode"
+            raise CommandError(error)
 
         # Get the last N migrations from the django_migrations table
         migrations = "SELECT * FROM django_migrations ORDER BY id DESC LIMIT %s"
@@ -42,6 +46,7 @@ class Command(BaseCommand):
 
             try:
                 print(f"Reverting {app_name} to {migration_name}")
-                call_command('migrate', app_name, migration_name)
-            except CommandError:
-                raise CommandError('Error reverting migration')
+                call_command("migrate", app_name, migration_name)
+            except CommandError as err:
+                error = "Error reverting migration"
+                raise CommandError(error) from err
