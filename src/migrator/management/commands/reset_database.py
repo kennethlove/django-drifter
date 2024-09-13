@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.management import call_command
+from django.core.management import CommandParser, call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
 
@@ -9,20 +9,30 @@ class Command(BaseCommand):
 
     help = "Drop all tables and run all migrations"
 
+    def add_arguments(self, parser: CommandParser) -> None:
+        """Add optional app argument to the command."""
+        parser.add_argument("-y", "--yes", action="store_true", help="Skip confirmation")
+
     def handle(self, *args: object, **options: object) -> None:
         """Drop all tables and run all migrations."""
         if not settings.DEBUG:
             error = "This command can only be run in DEBUG mode"
             raise CommandError(error)
 
-        query = ""
+        query: str = ""
         if settings.DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
-            query = "SELECT tablename FROM pg_tables WHERE schemaname = 'public'"
+            query += "SELECT tablename FROM pg_tables WHERE schemaname = 'public'"
         elif settings.DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
-            query = "SHOW TABLES"
+            query += "SHOW TABLES"
         else:
+            breakpoint()
             error = "Database engine not supported"
             raise CommandError(error)
+
+        if not options.get("yes"):
+            response = input("Are you sure you want to reset the database? [y/N]: ")
+            if response.lower() != "y":
+                return
 
         with connection.cursor() as cursor:
             cursor.execute(query)
