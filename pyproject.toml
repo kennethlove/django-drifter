@@ -16,7 +16,7 @@ version = "0.0.1"
 
 [project.optional-dependencies]
 development = [
-    "django-stubs[compatible-pyright]",
+    "django-stubs",
     "interrogate",
     "pyright",
     "ruff"
