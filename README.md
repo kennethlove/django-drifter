@@ -1,5 +1,7 @@
 # Django Drifter Project
 
+_*Currently only supports PostgreSQL*_
+
 ## Overview
 
 The Drifter project provides custom Django management commands to
