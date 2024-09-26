@@ -10,9 +10,9 @@ dependencies = [
 ]
 description = "More migration commands to make development life simpler"
 license = { file = "LICENSE.txt" }
-name = "migrator"
+name = "django-migrator"
 requires-python = ">=3.10"
-version = "0.0.1"
+version = "0.1.0"
 
 [project.optional-dependencies]
 development = [
@@ -145,8 +145,8 @@ extend-exclude = ["docs"]
 ignore-init-module-imports = true
 
 src = ["src", "tests"]
-# Assume Python 3.12.
-target-version = "py312"
+# Assume Python 3.10.
+target-version = "py310"
 
 indent-width = 4
 line-length = 88
