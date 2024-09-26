@@ -26,8 +26,8 @@ run in production (`DEBUG = False`).
 2. Add `drifter` to the `INSTALLED_APPS` setting in your Django project's `settings.py` file:
    ```python
    INSTALLED_APPS = [
-       ...,
        "drifter",
+       ...,
    ]
    ```
 
