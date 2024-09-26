@@ -17,18 +17,11 @@ run in production (`DEBUG = False`).
 
 ## Installation
 
-1. Clone the repository:
+1. Install the package:
    ```sh
-   git clone https://github.com/kennethlove/django-dtrifter.git
-   cd django-drifter
+   pip install django-drifter
    ```
-
-2. Install the required dependencies:
-   ```sh
-   pip install .
-   ```
-   
-3. Add `migrator` to the `INSTALLED_APPS` setting in your Django project's `settings.py` file:
+2. Add `drifter` to the `INSTALLED_APPS` setting in your Django project's `settings.py` file:
    ```python
    INSTALLED_APPS = [
        ...,
