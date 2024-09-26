@@ -37,7 +37,7 @@ class Command(BaseCommand):
         cursor.execute(query, [app_name])
         last_migration = cursor.fetchone()
         if last_migration is None:
-            print("No migrations to redo")
+            self.stdout.write(self.style.WARNING("No migrations to redo"))
             return
 
         app_name = last_migration[1]

@@ -45,7 +45,9 @@ class Command(BaseCommand):
                     migration_name = previous_migration[2]
 
             try:
-                print(f"Reverting {app_name} to {migration_name}")
+                self.stdout.write(self.style.SUCCESS(
+                    f"Reverting {app_name} to {migration_name}"
+                ))
                 call_command("migrate", app_name, migration_name)
             except CommandError as err:
                 error = "Error reverting migration"
