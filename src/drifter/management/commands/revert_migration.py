@@ -38,7 +38,8 @@ class Command(BaseCommand):
             if migration_name.startswith("0001"):
                 migration_name = "zero"  # Reset to initial state
             else:  # get previous migration name
-                query = "SELECT * FROM django_migrations WHERE app=%s AND id < %s ORDER BY id DESC LIMIT 1"
+                query = ("SELECT * FROM django_migrations WHERE app=%s "
+                         "AND id < %s ORDER BY id DESC LIMIT 1")
                 cursor.execute(query, [app_name, migration[0]])
                 previous_migration = cursor.fetchone()
                 if previous_migration is not None:
