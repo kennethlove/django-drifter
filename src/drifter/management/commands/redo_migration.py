@@ -29,7 +29,7 @@ class Command(BaseCommand):
             cursor.execute("PRAGMA foreign_keys = OFF")
 
         query = "SELECT * FROM django_migrations"
-        app_name = options.get("app", None)
+        app_name = options.get("app")
         if app_name:
             query += " WHERE app=%s "
         query += " ORDER BY id DESC LIMIT 1"
