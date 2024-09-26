@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 from django.core.management import CommandError, call_command
 
@@ -16,10 +18,12 @@ def test_reset_database_yes(capsys, settings):
 def test_reset_database(capsys, settings):
     """Resetting the database will ask for confirmation."""
     settings.DEBUG = True
-    with pytest.raises(OSError):
+
+    with mock.patch("builtins.input", return_value="q") as _:
         call_command("reset_database")
+
     captured = capsys.readouterr()
-    assert "Are you sure you want to reset the database? [y/N]: " in captured.out
+    assert "Reset cancelled" in captured.out
 
 
 def test_fails_in_production():
@@ -31,6 +35,8 @@ def test_fails_in_production():
 @pytest.mark.django_db
 def test_unsupported_engine(settings):
     """Command fails if the database engine is not supported."""
+    original_engine = settings.DATABASES["default"]["ENGINE"]
     settings.DATABASES["default"]["ENGINE"] = "django.db.backends.oracle"
     with pytest.raises(CommandError):
         call_command("reset_database")
+    settings.DATABASES["default"]["ENGINE"] = original_engine
