@@ -1,8 +1,8 @@
 from django.apps import AppConfig
 
 
-class MigratorConfig(AppConfig):
-    """Migrator app configuration."""
+class DrifterConfig(AppConfig):
+    """Drifter app configuration."""
 
     default_auto_field = "django.db.models.BigAutoField"
-    name = "migrator"
+    name = "drifter"
