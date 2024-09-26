@@ -12,7 +12,7 @@ description = "More migration commands to make development life simpler"
 license = { file = "LICENSE.txt" }
 name = "django-drifter"
 requires-python = ">=3.10"
-version = "0.1.0"
+version = "0.1.1"
 
 [project.optional-dependencies]
 development = [

@@ -38,14 +38,17 @@ class Command(BaseCommand):
             if migration_name.startswith("0001"):
                 migration_name = "zero"  # Reset to initial state
             else:  # get previous migration name
-                query = "SELECT * FROM django_migrations WHERE app=%s AND id < %s ORDER BY id DESC LIMIT 1"
+                query = ("SELECT * FROM django_migrations WHERE app=%s "
+                         "AND id < %s ORDER BY id DESC LIMIT 1")
                 cursor.execute(query, [app_name, migration[0]])
                 previous_migration = cursor.fetchone()
                 if previous_migration is not None:
                     migration_name = previous_migration[2]
 
             try:
-                print(f"Reverting {app_name} to {migration_name}")
+                self.stdout.write(self.style.SUCCESS(
+                    f"Reverting {app_name} to {migration_name}"
+                ))
                 call_command("migrate", app_name, migration_name)
             except CommandError as err:
                 error = "Error reverting migration"

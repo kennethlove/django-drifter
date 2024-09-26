@@ -1,0 +1,7 @@
+0.1.1 - Released 2024-09-26
+* Minor format changes
+* Removed an unnecessary default value
+* Changed `print()` to `self.stdout.write()` in the migration commands
+
+0.1.0 - Initial public release
+* Updated the name of the project to "drifter"
