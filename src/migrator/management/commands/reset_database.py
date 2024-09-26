@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.management import CommandParser, call_command
 from django.core.management.base import BaseCommand, CommandError
-from django.db import connection
+from django.db import DatabaseError, connection
 
 
 class Command(BaseCommand):
@@ -32,6 +32,7 @@ class Command(BaseCommand):
         if not options.get("yes"):
             response = input("Are you sure you want to reset the database? [y/N]: ")
             if response.lower() != "y":
+                self.stdout.write(self.style.WARNING("Reset cancelled"))
                 return
 
         with connection.cursor() as cursor:
@@ -40,7 +41,7 @@ class Command(BaseCommand):
             for table in tables:
                 try:
                     cursor.execute(f'DROP TABLE IF EXISTS "{table[0]}" CASCADE')
-                except Exception as e:
+                except DatabaseError as e:
                     self.stdout.write(self.style.ERROR(f"Error dropping table {table[0]}: {e}"))
                     continue
         self.stdout.write(self.style.SUCCESS("Successfully dropped all tables"))
