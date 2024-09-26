@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "tests.project.polls",
-    "migrator",
+    "drifter",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

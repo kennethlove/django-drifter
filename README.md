@@ -1,8 +1,8 @@
-# Migrator Project
+# Django Drifter Project
 
 ## Overview
 
-The Migrator project provides custom Django management commands to
+The Drifter project provides custom Django management commands to
 manage database migrations. It includes commands to revert and redo
 migrations for a specified app or the entire project.
 
@@ -19,8 +19,8 @@ run in production (`DEBUG = False`).
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/kennethlove/django-migrator.git
-   cd django-migrator
+   git clone https://github.com/kennethlove/django-dtrifter.git
+   cd django-drifter
    ```
 
 2. Install the required dependencies:
@@ -32,7 +32,7 @@ run in production (`DEBUG = False`).
    ```python
    INSTALLED_APPS = [
        ...,
-       "migrator",
+       "drifter",
    ]
    ```
 
@@ -74,7 +74,7 @@ python manage.py reset_database [--yes]
 Before running the tests, start a local Postgres database:
 
 ```shell
-docker run --name migrator-postgres -e POSTGRES_USER=django -e POSTGRES_PASSWORD=django -p 5432:5433 -d polls
+docker run --name drifter-postgres -e POSTGRES_USER=django -e POSTGRES_PASSWORD=django -p 5432:5432 -d polls
 ```
 
 To run the tests, use the following command:

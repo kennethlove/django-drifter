@@ -10,7 +10,7 @@ dependencies = [
 ]
 description = "More migration commands to make development life simpler"
 license = { file = "LICENSE.txt" }
-name = "django-migrator"
+name = "django-drifter"
 requires-python = ">=3.10"
 version = "0.1.0"
 
@@ -62,7 +62,7 @@ output = ".coverage.xml"
 django_settings_module = "tests.project.settings"
 
 [tool.flit.module]
-name = "migrator"
+name = "drifter"
 
 [tool.interrogate]
 color = true
